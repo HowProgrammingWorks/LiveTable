@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Live table</h1>
+<table id="table"></table>
+<style>
+input { border: 1px solid green; width: 30px; }
+</style>
+<script>
+
+  let table = document.getElementById('table');
+  let cells = {};
+  let letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+  let tr;
+  tr = document.createElement('tr');
+  tr.innerHTML = '<td></td>' + letters.map(
+    (col) => '<td>' + col + '</td>'
+  ).join('');
+  table.appendChild(tr);
+
+  for (let i = 1; i <= 5; i++) {
+    tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + i + '</td>' + letters.map(
+      (col) => '<td><input id="' + col + i + '" type="text"></td>'
+    ).join('');
+    table.appendChild(tr);
+    letters.forEach((col) => {
+      let cell = col + i;
+      let input = document.getElementById(cell);
+      input.addEventListener('keyup', keyup);
+      cells[cell] = input;
+    });
+  }
+
+  function keyup(event) {
+    socket.send(JSON.stringify({
+      cell: event.target.id,
+      value: event.target.value
+    }));
+  }
+
+  let socket = new WebSocket('ws://127.0.0.1/');
+
+  socket.onmessage = (event) => {
+    let change = JSON.parse(event.data);
+    let cell = cells[change.cell];
+    cell.value = change.value;
+  };
+
+</script>
+</body>
+</html>
