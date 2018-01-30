@@ -8,45 +8,46 @@ input { border: 1px solid green; width: 30px; }
 </style>
 <script>
 
-  let table = document.getElementById('table');
-  let cells = {};
-  let letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const socket = new WebSocket('ws://127.0.0.1/');
 
-  let tr;
-  tr = document.createElement('tr');
+  const table = document.getElementById('table');
+  const cells = {};
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+  socket.onmessage = (event) => {
+    const change = JSON.parse(event.data);
+    const cell = cells[change.cell];
+    cell.value = change.value;
+  };
+
+  const tr = document.createElement('tr');
   tr.innerHTML = '<td></td>' + letters.map(
     (col) => '<td>' + col + '</td>'
   ).join('');
   table.appendChild(tr);
 
-  for (let i = 1; i <= 5; i++) {
-    tr = document.createElement('tr');
+  const keyup = (event) => {
+    socket.send(JSON.stringify({
+      cell: event.target.id,
+      value: event.target.value
+    }));
+  };
+
+  const createRow = (i) => {
+    const tr = document.createElement('tr');
     tr.innerHTML = '<td>' + i + '</td>' + letters.map(
       (col) => '<td><input id="' + col + i + '" type="text"></td>'
     ).join('');
     table.appendChild(tr);
     letters.forEach((col) => {
-      let cell = col + i;
-      let input = document.getElementById(cell);
+      const cell = col + i;
+      const input = document.getElementById(cell);
       input.addEventListener('keyup', keyup);
       cells[cell] = input;
     });
-  }
-
-  function keyup(event) {
-    socket.send(JSON.stringify({
-      cell: event.target.id,
-      value: event.target.value
-    }));
-  }
-
-  let socket = new WebSocket('ws://127.0.0.1/');
-
-  socket.onmessage = (event) => {
-    let change = JSON.parse(event.data);
-    let cell = cells[change.cell];
-    cell.value = change.value;
   };
+
+  for (let i = 1; i <= 5; i++) createRow(i);
 
 </script>
 </body>
