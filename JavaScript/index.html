@@ -14,32 +14,31 @@ input { border: 1px solid green; width: 30px; }
   const cells = {};
   const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-  socket.onmessage = (event) => {
+  socket.onmessage = event => {
     const change = JSON.parse(event.data);
     const cell = cells[change.cell];
     cell.value = change.value;
   };
 
   const tr = document.createElement('tr');
-  tr.innerHTML = '<td></td>' + letters.map(
-    (col) => '<td>' + col + '</td>'
-  ).join('');
+  tr.innerHTML = '<td></td>' +
+    letters.map(col => `<td>${col}</td>`).join('');
   table.appendChild(tr);
 
-  const keyup = (event) => {
+  const keyup = event => {
     socket.send(JSON.stringify({
       cell: event.target.id,
       value: event.target.value
     }));
   };
 
-  const createRow = (i) => {
+  const createRow = i => {
     const tr = document.createElement('tr');
-    tr.innerHTML = '<td>' + i + '</td>' + letters.map(
-      (col) => '<td><input id="' + col + i + '" type="text"></td>'
+    tr.innerHTML = `<td>${i}</td>` + letters.map(
+      col => `<td><input id="${col}${i}" type="text"></td>`
     ).join('');
     table.appendChild(tr);
-    letters.forEach((col) => {
+    letters.forEach(col => {
       const cell = col + i;
       const input = document.getElementById(cell);
       input.addEventListener('keyup', keyup);
