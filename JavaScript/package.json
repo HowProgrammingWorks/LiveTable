@@ -1,11 +1,10 @@
 {
-  "name": "chatExample",
-  "version": "0.1.2",
+  "name": "live-table-example",
+  "version": "1.0.0",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
-  "description": "Websocket Chat Example",
+  "description": "Live Table Websocket Example",
   "license": "MIT",
   "dependencies": {
-    "websocket": "^1.0.28"
-  },
-  "readmeFilename": "README.md"
+    "websocket": "^1.0.30"
+  }
 }
