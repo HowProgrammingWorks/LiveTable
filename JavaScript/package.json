@@ -5,6 +5,6 @@
   "description": "Live Table Websocket Example",
   "license": "MIT",
   "dependencies": {
-    "ws": "^7.3.1"
+    "ws": "^7.4.0"
   }
 }
