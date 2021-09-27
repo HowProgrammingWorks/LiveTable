@@ -9,8 +9,7 @@
     "ecmaVersion": 2020
   },
   "globals": {
-    "BigInt": true,
-    "memory": true
+    "BigInt": true
   },
   "rules": {
     "indent": [
@@ -214,7 +213,7 @@
     ],
     "arrow-parens": [
       "error",
-      "as-needed"
+      "always"
     ],
     "arrow-body-style": [
       "error",
